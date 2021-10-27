@@ -1,21 +1,22 @@
-const jwt = require("jsonwebtoken");
-const { users: service } = require("../services");
+const jwt = require('jsonwebtoken');
+const { users: service } = require('../services');
 
-require("dotenv").config();
+require('dotenv').config();
 
 const { SECRET_KEY } = process.env;
 
 const authentificate = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
+    console.log(authorization);
 
-    const [bearer, token] = authorization.split(" ");
+    const [bearer, token] = authorization.split(' ');
 
-    if (bearer !== "Bearer") {
+    if (bearer !== 'Bearer') {
       return res.status(401).json({
-        status: "error",
+        status: 'error',
         code: 401,
-        message: "Not authorize",
+        message: 'Not authorize'
       });
     }
     const { id } = jwt.verify(token, SECRET_KEY);
@@ -24,9 +25,9 @@ const authentificate = async (req, res, next) => {
 
     if (!user || !user.token) {
       return res.status(401).json({
-        status: "error",
+        status: 'error',
         code: 401,
-        message: "Not authorize, incorrect user",
+        message: 'Not authorize, incorrect user'
       });
     }
     req.user = user;
